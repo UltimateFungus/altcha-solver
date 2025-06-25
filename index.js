@@ -9,7 +9,6 @@ const wsServer = new websocketServer({
 import puppeteer from "puppeteer";
 
 wsServer.on("request", req => {
-    console.log("Request!");
   const con = req.accept(null, req.origin);
   console.log("opened!");
   con.on("close", function () {
