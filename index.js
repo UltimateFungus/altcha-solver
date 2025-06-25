@@ -15,7 +15,7 @@ wsServer.on("request", req => {
   con.on("close", function () {
     console.log("closed!");
   });
-  con.on("message", message => ((data = JSON.parse(message.utfData)) => {
+  con.on("message", message => ((data = JSON.parse(message.utf8Data)) => {
     switch(data.type) {
       case "new":
         (async()=>{
