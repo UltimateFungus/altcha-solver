@@ -18,7 +18,10 @@ wsServer.on("request", req => {
     switch(data.type) {
       case "new":
         (async()=>{
-          const browser = await puppeteer.launch({ headless: true });
+          const browser = await puppeteer.launch({
+            headless: true,
+            executablePath: './node_modules/chromium-bidi/lib/esm/protocol/chromium-bidi.js'
+          });
           const page = await browser.newPage();
           await page.goto("https://api.moomoo.io/verify", { waitUntil: "domcontentloaded" });
           const content = await page.content();
