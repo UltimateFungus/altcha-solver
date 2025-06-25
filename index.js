@@ -10,22 +10,18 @@ const wsServer = new websocketServer({
 });
 import puppeteer from "puppeteer";
 
-wsServer.on("request", (request) => {
-  //connect
-  const connection = request.accept(null, request.origin);
+wsServer.on("request", req => {
+    console.log("Request!");
+  const con = req.accept(null, req.origin);
   console.log("opened!");
-  connection.on("close", function () {
+  con.on("close", function () {
     console.log("closed!");
   });
-  connection.on("message", function (message) {
-    const data = JSON.parse(message.utf8Data);
+  con.on("message", message => ((data = JSON.parse(message.utfData)) => {
     switch(data.type) {
       case "new":
         (async()=>{
-          const browser = await puppeteer.launch({ headless: true, args:[
-                  '--disable-setuid-sandbox',
-                  '--no-sandbox'
-          ]});
+          const browser = await puppeteer.launch({ headless: true });
           const page = await browser.newPage();
           await page.goto("https://api.moomoo.io/verify", { waitUntil: "domcontentloaded" });
           const content = await page.content();
@@ -34,8 +30,7 @@ wsServer.on("request", (request) => {
       break;
       case "token":
         const url = `wss://${data.server}.moomoo.io/?token=${data.token}`;
-        new Bot(url);
       break;
     }
-  });
+  })());
 });

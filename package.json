@@ -3,12 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "keywords": [],
-  "author": "",
+  "author": "UltimateFungus",
   "license": "ISC",
   "description": "",
+  "type": "module",
   "dependencies": {
     "http": "^0.0.1-security",
     "puppeteer": "^24.10.2",
