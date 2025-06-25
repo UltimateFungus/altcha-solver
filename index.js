@@ -2,9 +2,7 @@ import websocket from "websocket";
 const websocketServer = websocket.server;
 import http from "http";
 const httpServer = http.createServer();
-httpServer.listen(4000, "0.0.0.0", function () {
-  console.log("Listening... on 4000");
-});
+httpServer.listen(8000, "0.0.0.0", () => {console.log("Listening... on 4000")});
 const wsServer = new websocketServer({
   httpServer: httpServer,
 });
