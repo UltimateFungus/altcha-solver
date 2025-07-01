@@ -1,3 +1,6 @@
+import env from "dotenv";
+env.config();
+
 import websocket from "websocket";
 import http from "http";
 const websocketServer = websocket.server;
@@ -27,16 +30,18 @@ import puppeteer from "puppeteer-core";
 import chromium from "@sparticuz/chromium-min";
 
 async function getToken() {
-  console.log("called");
+  const isLocal = !!process.env.CHROME_EXECUTABLE_PATH;
+
   const browser = await puppeteer.launch({
-    args: chromium.args,
+    args: isLocal ? puppeteer.defaultArgs() : [...chromium.args, "--hide-scrollbars", "--incognito", "--no-sandbox"],
     defaultViewport: chromium.defaultViewport,
-    executablePath: await chromium.executablePath('https://github.com/Sparticuz/chromium/releases/download/v137.0.1/chromium-v137.0.1-pack.x64.tar'),
+    executablePath: process.env.CHROME_EXECUTABLE_PATH || await chromium.executablePath('https://github.com/Sparticuz/chromium/releases/download/v137.0.1/chromium-v137.0.1-pack.x64.tar'),
     headless: true,
+    ignoreHTTPSErrors: true
   });
 
   const page = await browser.newPage();
-  await page.goto("https://api.moomoo.io/verify");
+  await page.goto("https://spacejelly.dev");
   const content = await page.title();
   console.log(content);
   await browser.close();
