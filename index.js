@@ -41,8 +41,8 @@ async function getToken() {
   });
 
   const page = await browser.newPage();
-  await page.goto("https://spacejelly.dev");
-  const content = await page.title();
+  await page.goto("https://api.moomoo.io/verify");
+  const content = await page.content();
   console.log(content);
   await browser.close();
 }
