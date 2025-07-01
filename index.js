@@ -1,5 +1,5 @@
 import env from "dotenv";
-env.config();
+env.config({path: "./.env.local"});
 
 import websocket from "websocket";
 import http from "http";
