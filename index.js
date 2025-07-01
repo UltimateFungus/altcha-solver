@@ -32,7 +32,7 @@ async function getToken() {
     args: chromium.args,
     defaultViewport: chromium.defaultViewport,
     executablePath: await chromium.executablePath('https://github.com/Sparticuz/chromium/releases/download/v137.0.1/chromium-v137.0.1-pack.x64.tar'),
-    headless: chromium.headless,
+    headless: "shell",
   });
 
   const page = await browser.newPage();
