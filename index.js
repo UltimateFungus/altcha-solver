@@ -26,8 +26,11 @@ wsServer.on("request", req => {
   })());
 });
 
-import puppeteer from "puppeteer-core";
+import puppeteer from "puppeteer-extra";
+import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import chromium from "@sparticuz/chromium-min";
+
+puppeteer.use(StealthPlugin());
 
 async function getToken() {
   const isLocal = !!process.env.CHROME_EXECUTABLE_PATH;
