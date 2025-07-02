@@ -34,16 +34,23 @@ puppeteer.use(StealthPlugin());
 
 async function getToken() {
   const isLocal = !!process.env.CHROME_EXECUTABLE_PATH;
-
   const browser = await puppeteer.launch({
-    args: isLocal ? puppeteer.defaultArgs() : [...chromium.args, "--hide-scrollbars", "--incognito", "--no-sandbox"],
+    args: isLocal ? puppeteer.defaultArgs() : [...chromium.args, "--hide-scrollbars", "--incognito", "--no-sandbox", '--disable-blink-features=AutomationControlled'],
     defaultViewport: chromium.defaultViewport,
     executablePath: process.env.CHROME_EXECUTABLE_PATH || await chromium.executablePath('https://github.com/Sparticuz/chromium/releases/download/v137.0.1/chromium-v137.0.1-pack.x64.tar'),
-    headless: true,
+    headless: false,
     ignoreHTTPSErrors: true
   });
-
+  
   const page = await browser.newPage();
+  await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36');
+  await page.setViewport({
+    width: 1280 + Math.floor(Math.random() * 100),
+    height: 800 + Math.floor(Math.random() * 100),
+    deviceScaleFactor: 1,
+    isMobile: false,
+    hasTouch: false
+  });
   await page.goto("https://api.moomoo.io/verify");
   const content = await page.content();
   console.log(content);
