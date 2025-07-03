@@ -14,20 +14,43 @@ wsServer.on("request", req => {
   });
   con.on("message", message => ((data = JSON.parse(message.utf8Data)) => {
     switch(data.type) {
-      case "new":
-      break;
-      case "token":
-        const url = `wss://${data.server}.moomoo.io/?token=${data.token}`;
+      case "solve":
+        (async()=> {
+            console.log("solving...");
+            const token = await solve(data.data);
+            con.send(JSON.stringify({
+                "type": "token",
+                "token": token
+            }));
+            console.log("sent token!");
+        })()
       break;
     }
   })());
 });
 
+import { solveChallengeWorkers } from "altcha-lib";
 
-
-async function getToken() {
-  const data = await fetch("https://api.moomoo.io/verify");
-  const parsed = await data.json();
-  console.log(parsed);
+async function solve(data) {
+    const result = await solveChallengeWorkers(
+      "./node_modules/altcha-lib/dist/worker.js",
+      8,
+      data.challenge,
+      data.salt,
+      data.algorithm,
+      data.maxnumber
+    );
+    const tokenObj = JSON.stringify({
+      algorithm: data.algorithm,
+      challenge: data.challenge,
+      number: result.number,
+      salt: data.salt,
+      signature: data.signature,
+      took: result.took
+    });
+    const token = btoa(tokenObj);
+    return token;
 }
-getToken();
+
+
+
