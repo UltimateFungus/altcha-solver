@@ -1,33 +1,22 @@
-import websocket from "websocket";
-import http from "http";
-const websocketServer = websocket.server;
-const httpServer = http.createServer();
-httpServer.listen(10000, "0.0.0.0", () => {console.log("Listening on 10000")});
-const wsServer = new websocketServer({
-  httpServer: httpServer,
+import express from "express";
+
+const app = express();
+const PORT = 10000;
+
+app.use(express.json());
+
+app.post("/token", (req, res) => {
+    console.log("solving");
+    !!req.body && solve(req.body).then(token => {
+        console.log("sent");
+        res.send(token);
+    })
 });
-wsServer.on("request", req => {
-  const con = req.accept(null, req.origin);
-  console.log("opened!");
-  con.on("close", function () {
-    console.log("closed!");
-  });
-  con.on("message", message => ((data = JSON.parse(message.utf8Data)) => {
-    switch(data.type) {
-      case "solve":
-        (async()=> {
-            console.log("solving...");
-            const token = await solve(data.data);
-            con.send(JSON.stringify({
-                "type": "token",
-                "token": token
-            }));
-            console.log("sent token!");
-        })()
-      break;
-    }
-  })());
-});
+
+app.listen(
+    PORT,
+    () => console.log(`Listening on ${PORT}`)
+)
 
 import { solveChallenge, solveChallengeWorkers } from "altcha-lib";
 
