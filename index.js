@@ -8,11 +8,12 @@ app.use(cors());
 app.use(express.json());
 
 app.post("/token", (req, res) => {
-    console.log("solving");
-    !!req.body && solve(req.body).then(token => {
+    !!req.body ? (
+        console.log("solving...");
+        solve(req.body).then(token => {
         console.log("sent");
         res.send(token);
-    })
+    })) : console.log("missing challenge!");
 });
 
 app.listen(
