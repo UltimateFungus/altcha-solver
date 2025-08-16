@@ -1,4 +1,7 @@
 
-# **Moomoo.io** Bots
+# **Moomoo.io** Altcha Solver
 
-Da best bots
+Send a POST Request to [/] and provide your challenge in
+the **token** property of the body.
+
+The Result will give you your token!
